@@ -1,0 +1,2 @@
+# amar
+ task 1
