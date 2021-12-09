@@ -1,4 +1,4 @@
-# amar
+# Amar
  task 1
 
 # API Documentation
