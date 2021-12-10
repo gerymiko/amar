@@ -1,11 +1,11 @@
 # Amar
- task 1
+ Task 1
 
 # API Documentation
-Access via app like POSTMAN then access `http://localhost:8080/?key=123` for API authentication
-	key = `123`
-
-Put on POST method then choose form data for query parameter
+Access via app like POSTMAN then access `http://localhost:8080/?key=XXX` for API authentication
+	key = `YOURKEY`
+POST : http://localhost:8080/submission/?key=XXX
+Put on POST method then choose form data for query parameter :
 	ktp = XXXXX123123
 	email = ghXXXX@XXX.com
 	tgl_lahir = DD-MM-YYYY
