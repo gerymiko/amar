@@ -2,7 +2,7 @@
  Task 1
 
 # API Documentation
-Access via app like POSTMAN then access `http://localhost:8080/?key=XXX` for API authentication__
+Access via app like POSTMAN then access `http://localhost:8080/?key=XXX` for API authentication<br>
 	key = `YOURKEY`__
 POST : http://localhost:8080/submission/?key=XXX__
 Put on POST method then choose form data for query parameter :
