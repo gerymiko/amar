@@ -16,13 +16,16 @@ return [
             'level' => \Monolog\Logger::DEBUG,
         ],
 
-        // Database Settings
+        // DB Setting
         'db' => [
             'host' => 'localhost',
             'user' => 'root',
             'pass' => '123',
-            'dbname' => 'tokobuku',
-            'driver' => 'mysql'
-        ]
+            'dbname' => 'test',
+            'driver' => 'mysql',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ],
     ],
 ];
