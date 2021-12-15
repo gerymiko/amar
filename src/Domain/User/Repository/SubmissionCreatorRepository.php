@@ -35,16 +35,28 @@ final class SubmissionCreatorRepository
     {
         $row = [
             'ktp' => $user['ktp'],
-            // 'first_name' => $user['first_name'],
-            // 'last_name' => $user['last_name'],
-            // 'email' => $user['email'],
+            'jml_pinjaman' => $user['jml_pinjaman'],
+            'jangka_waktu' => $user['jangka_waktu'],
+            'nama_lengkap' => $user['nama_lengkap'],
+            'jk' => $user['jk'],
+            'alamat' => $user['alamat'],
+            'telepon' => $user['telepon'],
+            'email' => $user['email'],
+            'kebangsaan' => $user['kebangsaan'],
+            'provinsi' => $user['provinsi'],
         ];
 
         $sql = "INSERT INTO tblreqloan SET 
-                ktp=:ktp;";
-                // -- first_name=:first_name, 
-                // -- last_name=:last_name, 
-                // -- email=:email;";
+                ktp=:ktp,
+                jml_pinjaman=:jml_pinjaman, 
+                jangka_waktu=:jangka_waktu,
+                nama_lengkap=:nama_lengkap, 
+                jk=:jk,
+                alamat=:alamat,
+                telepon=:telepon,   
+                email=:email,
+                kebangsaan=:kebangsaan,
+                provinsi=:provinsi;";
 
         $this->connection->prepare($sql)->execute($row);
 

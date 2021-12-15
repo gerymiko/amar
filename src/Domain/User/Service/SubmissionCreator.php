@@ -62,6 +62,12 @@ final class SubmissionCreator
         define ("tenor", serialize (array ("3", "6", "12", "18", "36")));
         $tenor = unserialize (tenor);
 
+        define("jk", serialize (array ("L", "P")));
+        $jk = unserialize (jk);
+
+        define("kebangsaan", serialize (array ("WNI", "WNA")));
+        $kebangsaan = unserialize (kebangsaan);
+
         if (empty($data['jml_pinjaman'])) {
             $errors['jml_pinjaman'] = 'Input required';
         }
@@ -72,6 +78,22 @@ final class SubmissionCreator
         
         if (!in_array($data['jangka_waktu'], $tenor)) {
             $errors['jangka_waktu'] = 'Invalid input';
+        }
+
+        if (!in_array($data['jk'], $jk)) {
+            $errors['jk'] = 'Invalid input';
+        }
+
+        if (!in_array($data['kebangsaan'], $kebangsaan)) {
+            $errors['kebangsaan'] = 'Invalid input';
+        }
+
+        if (empty($data['jk'])) {
+            $errors['jk'] = 'Input required';
+        }
+
+        if (empty($data['kebangsaan'])) {
+            $errors['kebangsaan'] = 'Input required';
         }
 
         if (empty($data['ktp'])) {
