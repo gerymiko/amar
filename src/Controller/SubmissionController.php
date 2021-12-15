@@ -1,29 +1,26 @@
 <?php
 
-namespace App\Action;
+namespace App\Controller;
 
-use App\Domain\User\Service\UserCreator;
+use App\Domain\User\Service\SubmissionCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class UserCreateAction
+final class SubmissionController
 {
-    private $userCreator;
+    private $submissionCreator;
 
-    public function __construct(UserCreator $userCreator)
+    public function __construct(SubmissionCreator $submissionCreator)
     {
-        $this->userCreator = $userCreator;
+        $this->submissionCreator = $submissionCreator;
     }
 
-    public function __invoke(
-        ServerRequestInterface $request, 
-        ResponseInterface $response
-    ): ResponseInterface {
+    public function __invoke( ServerRequestInterface $request, ResponseInterface $response): ResponseInterface {
         // Collect input from the HTTP request
         $data = (array)$request->getParsedBody();
 
         // Invoke the Domain with inputs and retain the result
-        $userId = $this->userCreator->createUser($data);
+        $userId = $this->submissionCreator->createUser($data);
 
         // Transform the result into the JSON representation
         $result = [
