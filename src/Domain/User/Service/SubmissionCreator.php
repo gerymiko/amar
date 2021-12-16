@@ -3,6 +3,7 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Repository\SubmissionCreatorRepository;
+use App\Domain\User\Repository\ProvinceRepository;
 use App\Exception\ValidationException;
 use Respect\Validation\Validator as v;
 
@@ -17,14 +18,29 @@ final class SubmissionCreator
     private $repository;
 
     /**
+     * @var ProvinceRepository
+     */
+    private $repo;
+
+    /**
      * The constructor.
      *
      * @param SubmissionCreatorRepository $repository The repository
      */
-    public function __construct(SubmissionCreatorRepository $repository)
+    public function __construct(SubmissionCreatorRepository $repository, ProvinceRepository $repo)
     {
         $this->repository = $repository;
+        $this->repo = $repo;
     }
+
+    private function searchForId($id, $array) {
+        foreach ($array as $key => $val) {
+            if ($val['id'] === $id) {
+                return $key;
+            }
+        }
+        return null;
+     }
 
     /**
      * Create a new user.
@@ -74,22 +90,19 @@ final class SubmissionCreator
         
         if (empty($data['jangka_waktu'])) {
             $errors['jangka_waktu'] = 'Input required';
-        }
-        
-        if (!in_array($data['jangka_waktu'], $tenor)) {
+        } elseif (!in_array($data['jangka_waktu'], $tenor)) {
             $errors['jangka_waktu'] = 'Invalid input';
         }
-
-        if (!in_array($data['jk'], $jk)) {
+        if (empty($data['jk'])) {
+            $errors['jk'] = 'Input required';
+        } elseif (!in_array($data['jk'], $jk)) {
             $errors['jk'] = 'Invalid input';
         }
 
-        if (!in_array($data['kebangsaan'], $kebangsaan)) {
+        if (empty($data['kebangsaan'])) {
+            $errors['kebangsaan'] = 'Input required';
+        } elseif (!in_array($data['kebangsaan'], $kebangsaan)) {
             $errors['kebangsaan'] = 'Invalid input';
-        }
-
-        if (empty($data['jk'])) {
-            $errors['jk'] = 'Input required';
         }
 
         if (empty($data['kebangsaan'])) {
@@ -100,15 +113,12 @@ final class SubmissionCreator
             $errors['ktp'] = 'Input required';
         }
 
-        if (empty($data['tgl_lahir'])) {
-            $errors['tgl_lahir'] = 'Input required';
-        }
-
         $birth = date("Y-m-d", strtotime($data["tgl_lahir"]));
         $diff = date_diff(date_create($birth), date_create(date("Y-m-d")));
         $getbirth = intVal($diff->format('%y'));
-
-        if($getbirth <= 17 || $getbirth >= 80){
+        if (empty($data['tgl_lahir'])) {
+            $errors['tgl_lahir'] = 'Input required';
+        } elseif ($getbirth <= 17 || $getbirth >= 80) {
             $errors['tgl_lahir'] = 'Age does not meet the requirements';
         }
 
@@ -118,6 +128,15 @@ final class SubmissionCreator
             $errors['email'] = 'Invalid email address';
         }
 
+        $province = $this->repo->findAll();
+        $getprovince = $this->searchForId($data['provinsi'], $province);
+        
+        if (empty($data['provinsi'])) {
+            $errors['provinsi'] = 'Input required';
+        } elseif ($getprovince == NULL) {
+            $errors['provinsi'] = 'Province does not meet the requirements';
+        }
+        
         if ($errors) {
             throw new ValidationException('Please check your input', $errors);
         }
