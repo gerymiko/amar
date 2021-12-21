@@ -2,12 +2,16 @@
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Repository\SubmissionRepository;
-// use App\Domain\User\Repository\SubmissionCreatorRepository;
-use App\Exception\ValidationException;
-use Respect\Validation\Validator as v;
-// use App\Domain\User\Model\UserModel;
 use App\Domain\User\Model\UserData;
+use App\Domain\User\Repository\SubmissionRepository;
+use App\Domain\User\Type\UserTenor;
+use App\Domain\User\Type\UserGender;
+use App\Domain\User\Type\UserCity;
+use App\Exception\ValidationException;
+// use Respect\Validation\Validator as v;
+// use App\Domain\User\Repository\SubmissionCreatorRepository;
+// use App\Domain\User\Model\UserModel;
+
 /**
  * Service.
  */
@@ -86,18 +90,8 @@ final class SubmissionCreator
         
         // $validator->assert($data);
 
-
-        define ("tenor", serialize (array ("3", "6", "12", "18", "36")));
-        $tenor = unserialize (tenor);
-
-        define("jk", serialize (array ("L", "P")));
-        $jk = unserialize (jk);
-
         define("kebangsaan", serialize (array ("WNI", "WNA")));
         $kebangsaan = unserialize (kebangsaan);
-
-        define("provinsi", serialize (array ("DKI JAKARTA", "JAWA BARAT", "JAWA TIMUR", "SUMATERA UTARA")));
-        $provinsi = unserialize (provinsi);
 
         if (empty($data['ktp'])) {
             $errors['ktp'] = 'Input required';
@@ -109,12 +103,12 @@ final class SubmissionCreator
         
         if (empty($data['jangka_waktu'])) {
             $errors['jangka_waktu'] = 'Input required';
-        } elseif (!in_array($data['jangka_waktu'], $tenor)) {
+        } elseif (!in_array($data['jangka_waktu'], UserTenor::TENOR)) {
             $errors['jangka_waktu'] = 'Invalid input';
         }
         if (empty($data['jk'])) {
             $errors['jk'] = 'Input required';
-        } elseif (!in_array($data['jk'], $jk)) {
+        } elseif (!in_array($data['jk'], UserGender::GENDER)) {
             $errors['jk'] = 'Invalid input';
         }
 
@@ -141,12 +135,10 @@ final class SubmissionCreator
 
         if (empty($data['provinsi'])) {
             $errors['provinsi'] = 'Input required';
-        } elseif (!in_array($data['provinsi'], $provinsi)) {
+        } elseif (!in_array($data['provinsi'], UserCity::CITY)) {
             $errors['provinsi'] = 'Province does not meet the requirements';
         }
 
-        // var_dump($errors);
-        // exit;
         if ($errors) {
             throw new ValidationException('Please check your input', $errors);
         }
