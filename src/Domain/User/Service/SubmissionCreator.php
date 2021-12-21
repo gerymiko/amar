@@ -5,8 +5,8 @@ namespace App\Domain\User\Service;
 use App\Domain\User\Repository\SubmissionCreatorRepository;
 use App\Exception\ValidationException;
 use Respect\Validation\Validator as v;
-
-
+// use App\Domain\User\Model\UserModel;
+use App\Domain\User\Model\UserData;
 /**
  * Service.
  */
@@ -63,6 +63,16 @@ final class SubmissionCreator
 
         $validator = new v();
 
+        $user = new UserData($data);
+
+        $validator->addRule(v::key('ktp', v::allOf(
+            v::notEmpty()->setTemplate('The ktp must not be empty')
+        ))->setTemplate('The key "ktp" is required'));
+        
+        $validator->assert($user);
+        var_dump($validator->assert($user));
+
+        exit;
         $validator->addRule(v::key('ktp', v::allOf(
             v::notEmpty()->setTemplate('The ktp must not be empty'),
             v::length(3, 16)->setTemplate('Invalid length'),

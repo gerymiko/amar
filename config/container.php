@@ -1,5 +1,6 @@
 <?php
 
+use Cake\Database\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
@@ -39,18 +40,31 @@ return [
         return new BasePathMiddleware($container->get(App::class));
     },
 
+    // PDO::class => function (ContainerInterface $container) {
+    //     $settings = $container->get('settings')['db'];
+    
+    //     $host = $settings['host'];
+    //     $dbname = $settings['database'];
+    //     $username = $settings['username'];
+    //     $password = $settings['password'];
+    //     $charset = $settings['charset'];
+    //     $flags = $settings['flags'];
+    //     $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+    
+    //     return new PDO($dsn, $username, $password, $flags);
+    // },
+
+    // Database connection
+    Connection::class => function (ContainerInterface $container) {
+        return new Connection($container->get('settings')['db']);
+    },
+
     PDO::class => function (ContainerInterface $container) {
-        $settings = $container->get('settings')['db'];
-    
-        $host = $settings['host'];
-        $dbname = $settings['database'];
-        $username = $settings['username'];
-        $password = $settings['password'];
-        $charset = $settings['charset'];
-        $flags = $settings['flags'];
-        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-    
-        return new PDO($dsn, $username, $password, $flags);
+        $db = $container->get(Connection::class);
+        $driver = $db->getDriver();
+        $driver->connect();
+
+        return $driver->getConnection();
     },
 
 ];
