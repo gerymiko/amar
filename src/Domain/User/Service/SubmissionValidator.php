@@ -94,8 +94,8 @@ final class SubmissionValidator
             ->notEmptyString('provinsi', 'Input required')
             ->inList('jangka_waktu', UserTenor::TENOR, 'Invalid')
             ->inList('jk', UserGender::GENDER, 'Invalid')
-            ->inList('provinsi', [UserCity::CITY], 'Invalid')
-            ->inList('kebangsaan', [UserNationality::NATION], 'Invalid');
+            ->inList('provinsi', UserCity::CITY, 'Invalid')
+            ->inList('kebangsaan', UserNationality::NATION, 'Invalid');
             
     }
 }
