@@ -47,7 +47,7 @@ final class UserData
         $this->jml_pinjaman = $reader->findString('jml_pinjaman');
         $this->jangka_waktu = $reader->findInt('jangka_waktu');
         $this->nama_lengkap = $reader->findString('nama_lengkap');
-        $this->jk = $reader->findInt('jk');
+        $this->jk = $reader->findString('jk');
         $this->tgl_lahir = $reader->findString('tgl_lahir');
         $this->alamat = $reader->findString('alamat');
         $this->telepon = $reader->findString('telepon');
