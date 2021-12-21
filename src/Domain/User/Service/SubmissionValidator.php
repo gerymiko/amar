@@ -62,9 +62,17 @@ final class SubmissionValidator
     {
         $validator = $this->createValidator();
 
+        $birth = date("Y-m-d", strtotime($data["tgl_lahir"]));
+        $diff = date_diff(date_create($birth), date_create(date("Y-m-d")));
+        $getbirth = intVal($diff->format('%y'));
+
         $validationResult = $this->validationFactory->createValidationResult(
             $validator->validate($data)
         );
+
+        if ($getbirth <= 17 || $getbirth >= 80) {
+            $validationResult->addError('tgl_lahir', 'Age does not meet the requirements');
+        }
 
         if ($validationResult->fails()) {
             throw new ValidationException('Please check your input', $validationResult);
@@ -82,6 +90,8 @@ final class SubmissionValidator
 
         return $validator
             ->notEmptyString('ktp', 'Input required')
+            ->minLength('ktp', 16, 'Too short')
+            ->maxLength('ktp', 16, 'Too long')
             ->notEmptyString('jml_pinjaman', 'Input required')
             ->notEmptyString('jangka_waktu', 'Input required')
             ->notEmptyString('nama_lengkap', 'Input required')
