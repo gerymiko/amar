@@ -90,9 +90,6 @@ final class SubmissionRepository
     {
         $row = $this->toRow($user);
 
-        // Updating the password is another use case
-        unset($row['password']);
-
         $this->queryFactory->newUpdate('tblreqloan', $row)
             ->andWhere(['id' => $user->id])
             ->execute();

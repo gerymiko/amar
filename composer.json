@@ -1,10 +1,12 @@
 {
     "require": {
         "cakephp/database": "^4.3",
+        "cakephp/validation": "^4.3",
         "php-di/php-di": "*",
         "respect/validation": "^2.2",
         "selective/array-reader": "^1.1",
         "selective/basepath": "^2.1",
+        "selective/validation": "^2.0",
         "slim/psr7": "^1.5",
         "slim/slim": "4.*"
     },

@@ -1,20 +1,16 @@
 <?php
 
 use Selective\BasePath\BasePathMiddleware;
+use Selective\Validation\Middleware\ValidationExceptionMiddleware;
 use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
-use App\Middleware\RespectValidationMiddleware;
+// use App\Middleware\RespectValidationMiddleware;
 
 return function (App $app) {
-    // Parse json, form data and xml
     $app->addBodyParsingMiddleware();
-
-    // Add the Slim built-in routing middleware
+    $app->add(ValidationExceptionMiddleware::class);
     $app->addRoutingMiddleware();
-
     $app->add(BasePathMiddleware::class);
-
-    // Catch exceptions and errors
     $app->add(ErrorMiddleware::class);
-    $app->add(RespectValidationMiddleware::class);
+    // $app->add(RespectValidationMiddleware::class);
 };
