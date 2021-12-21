@@ -2,6 +2,7 @@
 
 namespace App\Domain\User\Service;
 
+use App\Domain\User\Repository\SubmissionRepository;
 use App\Domain\User\Repository\SubmissionCreatorRepository;
 use App\Exception\ValidationException;
 use Respect\Validation\Validator as v;
@@ -12,17 +13,15 @@ use App\Domain\User\Model\UserData;
  */
 final class SubmissionCreator
 {
-    /**
-     * @var SubmissionCreatorRepository
-     */
-    private $repository;
+
+    private SubmissionRepository $repository;
 
     /**
      * The constructor.
      *
-     * @param SubmissionCreatorRepository $repository The repository
+     * @param SubmissionRepository $repository The repository
      */
-    public function __construct(SubmissionCreatorRepository $repository)
+    public function __construct(SubmissionRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -39,8 +38,11 @@ final class SubmissionCreator
         // Input validation
         $this->validateNewUser($data);
 
+        // Map form data to user DTO (model)
+        $user = new UserData($data);
+
         // Insert user
-        $userId = $this->repository->insertUser($data);
+        $userId = $this->repository->insertUser($user);
 
         // Logging here: User created successfully
         //$this->logger->info(sprintf('User created successfully: %s', $userId));
@@ -61,38 +63,28 @@ final class SubmissionCreator
     {
         $errors = [];
 
-        $validator = new v();
+        // $validator = new v();
 
-        $user = new UserData($data);
+        // $validator->addRule(v::key('ktp', v::allOf(
+        //     v::notEmpty()->setTemplate('The ktp must not be empty'),
+        //     v::length(3, 16)->setTemplate('Invalid length'),
+        //     v::digit()->setTemplate('Invalid input')
+        // ))->setTemplate('The key "ktp" is required'));
 
-        $validator->addRule(v::key('ktp', v::allOf(
-            v::notEmpty()->setTemplate('The ktp must not be empty')
-        ))->setTemplate('The key "ktp" is required'));
-        
-        $validator->assert($user);
-        var_dump($validator->assert($user));
+        // $validator->addRule(v::key('jml_pinjaman', v::allOf(
+        //     v::notEmpty()->setTemplate('The loan must not be empty'),
+        //     v::length(6, 15)->setTemplate('Invalid length'),
+        //     v::digit()->setTemplate('Invalid input')
+        // ))->setTemplate('The key "loan" is required'));
 
-        exit;
-        $validator->addRule(v::key('ktp', v::allOf(
-            v::notEmpty()->setTemplate('The ktp must not be empty'),
-            v::length(3, 16)->setTemplate('Invalid length'),
-            v::digit()->setTemplate('Invalid input')
-        ))->setTemplate('The key "ktp" is required'));
-
-        $validator->addRule(v::key('jml_pinjaman', v::allOf(
-            v::notEmpty()->setTemplate('The loan must not be empty'),
-            v::length(6, 15)->setTemplate('Invalid length'),
-            v::digit()->setTemplate('Invalid input')
-        ))->setTemplate('The key "loan" is required'));
-
-        $validator->addRule(v::key('jangka_waktu', v::allOf(
-            v::notEmpty()->setTemplate('The tenor must not be empty'),
-            v::length(6, 15)->setTemplate('Invalid length'),
-            v::digit()->setTemplate('Invalid input')
-        ))->setTemplate('The key "tenor" is required'));
+        // $validator->addRule(v::key('jangka_waktu', v::allOf(
+        //     v::notEmpty()->setTemplate('The tenor must not be empty'),
+        //     v::length(6, 15)->setTemplate('Invalid length'),
+        //     v::digit()->setTemplate('Invalid input')
+        // ))->setTemplate('The key "tenor" is required'));
         
         
-        $validator->assert($data);
+        // $validator->assert($data);
 
 
         define ("tenor", serialize (array ("3", "6", "12", "18", "36")));
