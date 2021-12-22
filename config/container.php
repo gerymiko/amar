@@ -1,8 +1,15 @@
 <?php
 
 use Cake\Database\Connection;
+use Nyholm\Psr7\Factory\Psr17Factory;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\UploadedFileFactoryInterface;
+use Psr\Http\Message\UriFactoryInterface;
+
 use Selective\Validation\Encoder\JsonEncoder;
 use Selective\Validation\Middleware\ValidationExceptionMiddleware;
 use Selective\Validation\Transformer\ErrorDetailsResultTransformer;
@@ -10,6 +17,8 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
 use Selective\BasePath\BasePathMiddleware;
+use Slim\Interfaces\RouteParserInterface;
+use Slim\Views\PhpRenderer;
 
 return [
     'settings' => function () {
@@ -19,11 +28,41 @@ return [
     App::class => function (ContainerInterface $container) {
         AppFactory::setContainer($container);
 
-        return AppFactory::create();
+        $app = AppFactory::create();
+
+        // Register routes
+        (require __DIR__ . '/routes.php')($app);
+
+        // Register middleware
+        (require __DIR__ . '/middleware.php')($app);
+
+        return $app;
     },
 
+    // HTTP factories
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(App::class)->getResponseFactory();
+    },
+
+    ServerRequestFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(Psr17Factory::class);
+    },
+
+    StreamFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(Psr17Factory::class);
+    },
+
+    UploadedFileFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(Psr17Factory::class);
+    },
+
+    UriFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(Psr17Factory::class);
+    },
+
+    // The Slim RouterParser
+    RouteParserInterface::class => function (ContainerInterface $container) {
+        return $container->get(App::class)->getRouteCollector()->getRouteParser();
     },
 
     ErrorMiddleware::class => function (ContainerInterface $container) {
@@ -63,5 +102,9 @@ return [
             new JsonEncoder()
         );
     },
+
+    // PhpRenderer::class => function (ContainerInterface $container) {
+    //     return new PhpRenderer($container->get('settings')['template']);
+    // },
 
 ];

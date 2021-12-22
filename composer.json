@@ -1,13 +1,22 @@
 {
+    "name": "gerymiko/amar",
+    "type": "task",
+    "description": "Task Amar",
     "require": {
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "cakephp/chronos": "^2",
         "cakephp/database": "^4.3",
         "cakephp/validation": "^4.3",
+        "fig/http-message-util": "^1.1",
+        "nyholm/psr7": "^1.4",
+        "nyholm/psr7-server": "^1.0",
         "php-di/php-di": "*",
         "respect/validation": "^2.2",
         "selective/array-reader": "^1.1",
         "selective/basepath": "^2.1",
         "selective/validation": "^2.0",
-        "slim/psr7": "^1.5",
+        "slim/php-view": "^3.0",
         "slim/slim": "4.*"
     },
     "require-dev": {
