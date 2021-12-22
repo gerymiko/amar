@@ -25,7 +25,7 @@ final class SubmissionController
 
         // Transform the result into the JSON representation
         $result = [
-            'user_id' => $userId
+            'id' => $userId
         ];
 
         // Build the HTTP response

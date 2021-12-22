@@ -3,6 +3,7 @@
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Repository\SubmissionRepository;
+use App\Domain\User\Type\UserLoan;
 use App\Domain\User\Type\UserTenor;
 use App\Domain\User\Type\UserGender;
 use App\Domain\User\Type\UserCity;
@@ -102,6 +103,7 @@ final class SubmissionValidator
             ->email('email', false, 'Input required')
             ->notEmptyString('kebangsaan', 'Input required')
             ->notEmptyString('provinsi', 'Input required')
+            ->inList('jml_pinjaman', UserLoan::LOAN, 'Invalid')
             ->inList('jangka_waktu', UserTenor::TENOR, 'Invalid')
             ->inList('jk', UserGender::GENDER, 'Invalid')
             ->inList('provinsi', UserCity::CITY, 'Invalid')
